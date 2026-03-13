@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City Data - NagarDrishti AI</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dashboard-layout">
+  <header class="header">
+    <div class="header-left">
+      <a href="/dashboard.html" class="logo-link">
+        <div class="logo-icon"><svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="8" fill="url(#nd-logo-cd)"/><path d="M8 28V14h6v14H8zm9-8v6h6v-6h-6zm9-6v12h6V14h-6z" fill="white"/><circle cx="20" cy="10" r="3" fill="rgba(255,255,255,0.9)"/><defs><linearGradient id="nd-logo-cd" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#1e3a5f"/></linearGradient></defs></svg></div>
+        <span class="logo-text">NagarDrishti AI</span>
+      </a>
+      <nav class="nav-links" id="mainNav">
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/cityData.html" class="active">City Data</a>
+        <a href="/aiInsights.html">AI Insights</a>
+        <a href="/planner.html" class="nav-planner" id="navPlanner" style="display:none">Planner</a>
+        <a href="/reports.html">Reports</a>
+        <a href="/admin.html" class="nav-admin" id="navAdmin" style="display:none">Admin</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <select id="headerCitySelect" class="city-select">
+        <option value="Nagpur">Nagpur</option>
+        <option value="Delhi">Delhi</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Bangalore">Bangalore</option>
+        <option value="Pune">Pune</option>
+        <option value="Hyderabad">Hyderabad</option>
+        <option value="Chennai">Chennai</option>
+        <option value="Ahmedabad">Ahmedabad</option>
+        <option value="Kolkata">Kolkata</option>
+      </select>
+      <div class="header-icons">
+        <button id="darkModeToggle" class="icon-btn theme-toggle" title="Toggle theme"><span class="icon-moon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="icon-sun" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span></button>
+        <div class="notification-wrap"><button id="notificationBtn" class="icon-btn" title="Alerts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="notification-badge" id="notificationBadge" style="display:none">0</span></button><div class="notification-dropdown" id="notificationDropdown"><div class="notification-header">Alerts</div><div class="notification-list" id="notificationList"></div><div class="notification-empty" id="notificationEmpty">No new alerts</div></div></div>
+        <a href="/settings.html" class="icon-btn">⚙</a>
+      </div>
+      <div class="user-profile-wrap" id="userProfileWrap">
+        <div class="user-profile" id="userProfileBtn">
+          <div class="user-info">
+            <div id="userName" class="user-name">User</div>
+            <div id="userRole" class="user-role">Analyst</div>
+          </div>
+          <span class="user-chevron">▼</span>
+        </div>
+        <div class="user-profile-dropdown">
+          <button type="button" class="logout-btn" data-logout>Log out</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="page-header">
+      <h1>City Data</h1>
+      <p class="subtitle">Raw sensor readings and analytics for selected area</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+        <div class="filter-tags" id="filterTags">
+          <span class="filter-tag area" id="areaTag">Sitabuldi</span>
+          <span class="filter-tag hotspot" id="hotspotTag">traffic hotspot</span>
+        </div>
+        <select id="areaSelect" class="city-select" style="min-width:200px;">
+          <option value="All Areas (City Overview)">All Areas</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="data-cards-grid" id="dataCards">
+      <div class="data-card">
+        <h4><span class="metric-icon-sm" id="iconTrafficCD"></span> Traffic Sensors</h4>
+        <div class="data-metric">
+          <span>Vehicle Density Index</span>
+          <span><strong id="vd">--%</strong> <span class="status-badge green" id="vdStatus">Low</span></span>
+        </div>
+        <div class="data-metric">
+          <span>Avg Speed (Corridor)</span>
+          <span><strong id="avgSpeed">-- km/h</strong> <span class="status-badge green">Normal</span></span>
+        </div>
+        <div class="data-metric">
+          <span>Peak Incident Count</span>
+          <span><strong id="incidents">--/hr</strong> <span class="status-badge blue">Live</span></span>
+        </div>
+        <div class="data-metric">
+          <span>Intersection Load</span>
+          <span><strong id="intersectionLoad">-- veh/hr</strong> <span class="status-badge green">Low</span></span>
+        </div>
+      </div>
+      <div class="data-card">
+        <h4><span class="metric-icon-sm" id="iconAqiCD"></span> Pollution Sensors</h4>
+        <div class="data-metric">
+          <span>AQI (Overall)</span>
+          <span><strong id="aqi">--</strong> <span class="status-badge green" id="aqiStatus">Good</span></span>
+        </div>
+        <div class="data-metric">
+          <span>PM2.5</span>
+          <span><strong id="pm25">-- µg/m³</strong> <span class="status-badge green">Normal</span></span>
+        </div>
+        <div class="data-metric">
+          <span>PM10</span>
+          <span><strong id="pm10">-- µg/m³</strong> <span class="status-badge green">Normal</span></span>
+        </div>
+        <div class="data-metric">
+          <span>NO₂</span>
+          <span><strong id="no2">-- ppb</strong> <span class="status-badge green">Safe</span></span>
+        </div>
+      </div>
+      <div class="data-card">
+        <h4><span class="metric-icon-sm" id="iconEnergyCD"></span> Energy Meters</h4>
+        <div class="data-metric">
+          <span>Total Consumption</span>
+          <span><strong id="energyTotal">-- MWh</strong> <span class="status-badge green">Low</span></span>
+        </div>
+        <div class="data-metric">
+          <span>Residential Demand</span>
+          <span><strong id="energyRes">-- MWh</strong> <span class="status-badge blue">Active</span></span>
+        </div>
+      </div>
+      <div class="data-card">
+        <h4><span class="metric-icon-sm" id="iconTransportCD"></span> Transport Data</h4>
+        <div class="data-metric">
+          <span>Public Transport Usage</span>
+          <span><strong id="transportPct">--%</strong> <span class="status-badge orange">Moderate</span></span>
+        </div>
+        <div class="data-metric">
+          <span>Bus Passenger Load</span>
+          <span><strong id="busLoad">-- pax/hr</strong> <span class="status-badge blue">Active</span></span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <button class="chatbot-btn" id="chatbotBtn">💬</button>
+
+  <script src="app.js"></script>
+  <script src="icons.js"></script>
+  <script src="chatbot.js"></script>
+  <script src="reportIssue.js"></script>
+  <script>
+    initHeader();
+    initDarkMode();
+
+    const areaSelect = document.getElementById('areaSelect');
+    const areaTag = document.getElementById('areaTag');
+
+    async function loadAreas() {
+      const city = document.getElementById('headerCitySelect').value;
+      const res = await fetch('/api/cities/' + encodeURIComponent(city) + '/areas');
+      const { areas } = await res.json();
+      areaSelect.innerHTML = '<option value="All Areas (City Overview)">All Areas (City Overview)</option>';
+      (areas || []).forEach(a => {
+        const opt = document.createElement('option');
+        opt.value = a.name;
+        opt.textContent = a.name;
+        areaSelect.appendChild(opt);
+      });
+      const current = getSelectedArea();
+      if (current !== 'All Areas (City Overview)') areaSelect.value = current;
+    }
+
+    async function loadData() {
+      const city = document.getElementById('headerCitySelect').value;
+      const area = areaSelect.value === 'All Areas (City Overview)' ? '' : areaSelect.value;
+      areaTag.textContent = area || city;
+      try {
+        const m = await fetchMetrics(city, area);
+        const vd = 40 + Math.random() * 30;
+        document.getElementById('vd').textContent = Math.round(vd) + '%';
+        document.getElementById('vdStatus').textContent = vd > 60 ? 'High' : 'Low';
+        document.getElementById('vdStatus').className = 'status-badge ' + (vd > 60 ? 'orange' : 'green');
+        document.getElementById('avgSpeed').textContent = (25 + Math.random() * 20).toFixed(0) + ' km/h';
+        document.getElementById('incidents').textContent = (3 + Math.floor(Math.random() * 8)) + '/hr';
+        document.getElementById('intersectionLoad').textContent = (40 + Math.floor(Math.random() * 80)) + ' veh/hr';
+        document.getElementById('aqi').textContent = m.aqi + ' index';
+        document.getElementById('aqiStatus').textContent = m.aqi > 100 ? 'Moderate' : 'Good';
+        document.getElementById('aqiStatus').className = 'status-badge ' + (m.aqi > 100 ? 'orange' : 'green');
+        document.getElementById('pm25').textContent = (20 + Math.floor(Math.random() * 40)) + ' µg/m³';
+        document.getElementById('pm10').textContent = (40 + Math.floor(Math.random() * 50)) + ' µg/m³';
+        document.getElementById('no2').textContent = (10 + Math.floor(Math.random() * 20)) + ' ppb';
+        document.getElementById('energyTotal').textContent = (m.energyConsumption * 0.8).toFixed(1) + ' MWh';
+        document.getElementById('energyRes').textContent = (m.energyConsumption * 0.4).toFixed(1) + ' MWh';
+        document.getElementById('transportPct').textContent = Math.round((m.publicTransportUsage / 80000) * 100) + '%';
+        document.getElementById('busLoad').textContent = (80 + Math.floor(Math.random() * 80)) + ' pax/hr';
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    areaSelect.addEventListener('change', () => {
+      setSelectedArea(areaSelect.value);
+      loadData();
+    });
+
+    document.getElementById('headerCitySelect').addEventListener('change', () => {
+      loadAreas();
+      loadData();
+    });
+
+    ['traffic','aqi','energy','transport'].forEach(m => {
+      const el = document.getElementById('icon'+m.charAt(0).toUpperCase()+m.slice(1)+'CD');
+      if (el && typeof getIcon==='function') el.innerHTML = getIcon(m);
+    });
+    initNotifications();
+    loadAreas();
+    loadData();
+  </script>
+</body>
+</html>

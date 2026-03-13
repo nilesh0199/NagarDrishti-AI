@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports - NagarDrishti AI</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dashboard-layout">
+  <header class="header">
+    <div class="header-left">
+      <a href="/dashboard.html" class="logo-link">
+        <div class="logo-icon"><svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="8" fill="url(#nd-logo-rpt)"/><path d="M8 28V14h6v14H8zm9-8v6h6v-6h-6zm9-6v12h6V14h-6z" fill="white"/><circle cx="20" cy="10" r="3" fill="rgba(255,255,255,0.9)"/><defs><linearGradient id="nd-logo-rpt" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#1e3a5f"/></linearGradient></defs></svg></div>
+        <span class="logo-text">NagarDrishti AI</span>
+      </a>
+      <nav class="nav-links" id="mainNav">
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/cityData.html">City Data</a>
+        <a href="/aiInsights.html">AI Insights</a>
+        <a href="/planner.html" class="nav-planner" id="navPlanner" style="display:none">Planner</a>
+        <a href="/reports.html" class="active">Reports</a>
+        <a href="/admin.html" class="nav-admin" id="navAdmin" style="display:none">Admin</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <select id="headerCitySelect" class="city-select">
+        <option value="Nagpur">Nagpur</option>
+        <option value="Delhi">Delhi</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Bangalore">Bangalore</option>
+        <option value="Pune">Pune</option>
+        <option value="Hyderabad">Hyderabad</option>
+        <option value="Chennai">Chennai</option>
+        <option value="Ahmedabad">Ahmedabad</option>
+        <option value="Kolkata">Kolkata</option>
+      </select>
+      <div class="header-icons">
+        <button id="darkModeToggle" class="icon-btn theme-toggle" title="Toggle theme"><span class="icon-moon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="icon-sun" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span></button>
+        <div class="notification-wrap"><button id="notificationBtn" class="icon-btn" title="Alerts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="notification-badge" id="notificationBadge" style="display:none">0</span></button><div class="notification-dropdown" id="notificationDropdown"><div class="notification-header">Alerts</div><div class="notification-list" id="notificationList"></div><div class="notification-empty" id="notificationEmpty">No new alerts</div></div></div>
+        <a href="/settings.html" class="icon-btn">⚙</a>
+      </div>
+      <div class="user-profile-wrap" id="userProfileWrap">
+        <div class="user-profile" id="userProfileBtn">
+          <div class="user-info">
+            <div id="userName" class="user-name">User</div>
+            <div id="userRole" class="user-role">Analyst</div>
+          </div>
+          <span class="user-chevron">▼</span>
+        </div>
+        <div class="user-profile-dropdown">
+          <button type="button" class="logout-btn" data-logout>Log out</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="reports-header">
+      <div class="page-header">
+        <h1>Reports</h1>
+        <p class="subtitle">Generate and download professional PDF city analytics reports</p>
+      </div>
+      <button type="button" class="btn btn-primary" id="generateReportBtn">+ Generate Report</button>
+    </div>
+
+    <h3 style="margin-bottom:1rem;">Report History <span id="reportCount" style="background:var(--border);padding:0.2rem 0.5rem;border-radius:4px;font-size:0.85rem;">0</span></h3>
+    <div id="reportList"></div>
+  </main>
+
+  <!-- Generate Report Modal -->
+  <div class="modal-overlay" id="generateModal" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Generate Report</h3>
+        <button type="button" class="modal-close" id="closeGenerateModal">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>City</label>
+          <select id="genCity" class="city-select" style="width:100%;">
+            <option value="Nagpur">Nagpur</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Pune">Pune</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Ahmedabad">Ahmedabad</option>
+            <option value="Kolkata">Kolkata</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Area</label>
+          <select id="genArea" class="city-select" style="width:100%;">
+            <option value="All Areas">All Areas</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Time Range</label>
+          <select id="genTimeRange" style="width:100%;padding:0.75rem;border:2px solid var(--border);border-radius:8px;">
+            <option value="24h">Last 24 Hours</option>
+            <option value="7d">Last 7 Days</option>
+            <option value="30d">Last 30 Days</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Topics</label>
+          <div style="display:grid;gap:0.5rem;">
+            <label><input type="checkbox" name="topic" value="City Overview" checked> City Overview</label>
+            <label><input type="checkbox" name="topic" value="Traffic Analysis" checked> Traffic Analysis</label>
+            <label><input type="checkbox" name="topic" value="Air Quality" checked> Air Quality</label>
+            <label><input type="checkbox" name="topic" value="Public Transport" checked> Public Transport</label>
+            <label><input type="checkbox" name="topic" value="Energy Consumption" checked> Energy Consumption</label>
+            <label><input type="checkbox" name="topic" value="Water Usage" checked> Water Usage</label>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" id="doGenerate" style="width:100%;">Generate PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="chatbot-btn" id="chatbotBtn">💬</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="app.js"></script>
+  <script src="reports.js"></script>
+  <script src="chatbot.js"></script>
+  <script src="reportIssue.js"></script>
+  <script>
+    initHeader();
+    initDarkMode();
+    initNotifications();
+
+    let reports = JSON.parse(localStorage.getItem('nagarReports') || '[]');
+
+    function renderReports() {
+      document.getElementById('reportCount').textContent = reports.length;
+      document.getElementById('reportList').innerHTML = reports.length
+        ? reports.map((r, i) => `
+            <div class="report-card">
+              <div class="report-icon">📄</div>
+              <div class="report-info">
+                <div class="report-title">${r.city} - ${r.area}</div>
+                <div class="report-meta">${r.topics.join(', ')} - ${r.timeRange}</div>
+                <div class="report-meta">${r.date} • ${r.filename}</div>
+                <div class="report-status">PDF Ready</div>
+                <a href="#" class="btn btn-primary" style="margin-top:0.5rem;display:inline-block;text-decoration:none;padding:0.5rem 1rem;font-size:0.9rem;" data-download="${i}">Download PDF</a>
+              </div>
+            </div>
+          `).join('')
+        : '<p style="color:var(--text-muted);">No reports generated yet.</p>';
+
+      document.querySelectorAll('[data-download]').forEach(a => {
+        a.onclick = (e) => {
+          e.preventDefault();
+          const idx = parseInt(a.dataset.download);
+          downloadReport(reports[idx]);
+        };
+      });
+    }
+
+    async function loadAreasForModal() {
+      const city = document.getElementById('genCity').value;
+      const res = await fetch('/api/cities/' + encodeURIComponent(city) + '/areas');
+      const { areas } = await res.json();
+      const sel = document.getElementById('genArea');
+      sel.innerHTML = '<option value="All Areas">All Areas</option>';
+      (areas || []).forEach(a => {
+        const opt = document.createElement('option');
+        opt.value = a.name;
+        opt.textContent = a.name;
+        sel.appendChild(opt);
+      });
+    }
+
+    document.getElementById('generateReportBtn').onclick = () => {
+      document.getElementById('genCity').value = document.getElementById('headerCitySelect').value;
+      loadAreasForModal();
+      document.getElementById('generateModal').style.display = 'flex';
+    };
+
+    document.getElementById('genCity').addEventListener('change', loadAreasForModal);
+
+    document.getElementById('closeGenerateModal').onclick = () => {
+      document.getElementById('generateModal').style.display = 'none';
+    };
+
+    document.getElementById('generateModal').onclick = (e) => {
+      if (e.target.id === 'generateModal') document.getElementById('generateModal').style.display = 'none';
+    };
+
+    document.getElementById('doGenerate').onclick = async () => {
+      const city = document.getElementById('genCity').value;
+      const area = document.getElementById('genArea').value;
+      const timeRange = document.getElementById('genTimeRange').value;
+      const topics = Array.from(document.querySelectorAll('input[name="topic"]:checked')).map(c => c.value);
+      if (topics.length === 0) {
+        alert('Select at least one topic.');
+        return;
+      }
+      const report = await generateReport(city, area, timeRange, topics);
+      reports.unshift(report);
+      localStorage.setItem('nagarReports', JSON.stringify(reports));
+      renderReports();
+      document.getElementById('generateModal').style.display = 'none';
+    };
+
+    renderReports();
+  </script>
+</body>
+</html>

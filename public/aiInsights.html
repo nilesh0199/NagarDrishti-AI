@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Insights - NagarDrishti AI</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dashboard-layout">
+  <header class="header">
+    <div class="header-left">
+      <a href="/dashboard.html" class="logo-link">
+        <div class="logo-icon"><svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="8" fill="url(#nd-logo-ai)"/><path d="M8 28V14h6v14H8zm9-8v6h6v-6h-6zm9-6v12h6V14h-6z" fill="white"/><circle cx="20" cy="10" r="3" fill="rgba(255,255,255,0.9)"/><defs><linearGradient id="nd-logo-ai" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#2563eb"/><stop offset="1" stop-color="#1e3a5f"/></linearGradient></defs></svg></div>
+        <span class="logo-text">NagarDrishti AI</span>
+      </a>
+      <nav class="nav-links" id="mainNav">
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/cityData.html">City Data</a>
+        <a href="/aiInsights.html" class="active">AI Insights</a>
+        <a href="/planner.html" class="nav-planner" id="navPlanner" style="display:none">Planner</a>
+        <a href="/reports.html">Reports</a>
+        <a href="/admin.html" class="nav-admin" id="navAdmin" style="display:none">Admin</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <select id="headerCitySelect" class="city-select">
+        <option value="Nagpur">Nagpur</option>
+        <option value="Delhi">Delhi</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Bangalore">Bangalore</option>
+        <option value="Pune">Pune</option>
+        <option value="Hyderabad">Hyderabad</option>
+        <option value="Chennai">Chennai</option>
+        <option value="Ahmedabad">Ahmedabad</option>
+        <option value="Kolkata">Kolkata</option>
+      </select>
+      <div class="header-icons">
+        <button id="darkModeToggle" class="icon-btn theme-toggle" title="Toggle theme"><span class="icon-moon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span><span class="icon-sun" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span></button>
+        <div class="notification-wrap"><button id="notificationBtn" class="icon-btn" title="Alerts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="notification-badge" id="notificationBadge" style="display:none">0</span></button><div class="notification-dropdown" id="notificationDropdown"><div class="notification-header">Alerts</div><div class="notification-list" id="notificationList"></div><div class="notification-empty" id="notificationEmpty">No new alerts</div></div></div>
+        <a href="/settings.html" class="icon-btn">⚙</a>
+      </div>
+      <div class="user-profile-wrap" id="userProfileWrap">
+        <div class="user-profile" id="userProfileBtn">
+          <div class="user-info">
+            <div id="userName" class="user-name">User</div>
+            <div id="userRole" class="user-role">Analyst</div>
+          </div>
+          <span class="user-chevron">▼</span>
+        </div>
+        <div class="user-profile-dropdown">
+          <button type="button" class="logout-btn" data-logout>Log out</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="page-header">
+      <h1>AI Insights</h1>
+      <p class="subtitle">Smart city intelligence for <span id="cityLabel">Nagpur</span></p>
+      <span class="filter-tag area" id="cityTag">Nagpur</span>
+    </div>
+
+    <div class="insights-grid">
+      <div>
+        <h3 style="margin-bottom:1rem;">5 Active AI Insights</h3>
+        <div id="insightsList"></div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:1rem;">💡 Recommendations</h3>
+        <div id="recommendationsList"></div>
+      </div>
+    </div>
+  </main>
+
+  <button class="chatbot-btn" id="chatbotBtn">💬</button>
+
+  <script src="app.js"></script>
+  <script src="chatbot.js"></script>
+  <script src="reportIssue.js"></script>
+  <script>
+    initHeader();
+    initDarkMode();
+
+    const insights = [
+      { priority: 'high', icon: '⚠', area: 'Sitabuldi', text: 'Heavy traffic detected in Sitabuldi area. Market hours causing significant congestion.' },
+      { priority: 'medium', icon: 'ℹ', area: 'Mahal', text: 'Rising pollution levels near Mahal. Industrial activities increasing PM2.5.' },
+      { priority: 'low', icon: '✓', area: 'Manish Nagar', text: 'Energy consumption increasing in Manish Nagar. Residential energy demand growing rapidly.' },
+      { priority: 'high', icon: '⚠', area: 'Hingna', text: 'Industrial emissions spike in Hingna. MIDC factories exceeding pollution norms.' },
+      { priority: 'medium', icon: 'ℹ', area: 'Dharampeth', text: 'Public transport demand up 15%. Consider adding routes during peak hours.' }
+    ];
+
+    const recommendations = [
+      { priority: 'high', icon: '🚦', topic: 'Traffic', text: 'Optimize traffic signals in Sitabuldi. Implement AI-based adaptive signal control to reduce congestion by 30%.' },
+      { priority: 'high', icon: '🚌', topic: 'Transport', text: 'Increase bus routes in central areas. Add 8 new city bus routes connecting key areas to reduce private vehicle use.' },
+      { priority: 'high', icon: '🌿', topic: 'Environment', text: 'Reduce industrial emissions in Hingna. Enforce pollution norms for MIDC factories; install scrubbers.' },
+      { priority: 'medium', icon: '⚡', topic: 'Energy', text: 'Solar panels on NMC buildings. Install rooftop solar on 50 municipal buildings by Q3.' }
+    ];
+
+    function render() {
+      const city = document.getElementById('headerCitySelect').value;
+      document.getElementById('cityLabel').textContent = city;
+      document.getElementById('cityTag').textContent = city;
+
+      document.getElementById('insightsList').innerHTML = insights.map(i => `
+        <div class="insight-card" style="margin-bottom:0.75rem;">
+          <span class="priority-tag ${i.priority}">${i.priority.toUpperCase()}</span>
+          <div><strong>${i.area}</strong></div>
+          <div style="font-size:0.9rem;color:var(--text-muted);margin-top:0.25rem;">${i.text}</div>
+          <span style="float:right;">→</span>
+        </div>
+      `).join('');
+
+      document.getElementById('recommendationsList').innerHTML = recommendations.map(r => `
+        <div class="insight-card" style="margin-bottom:0.75rem;">
+          <span class="priority-tag ${r.priority}">${r.priority.toUpperCase()} PRIORITY</span>
+          <div><strong>${r.topic}</strong></div>
+          <div style="font-size:0.9rem;color:var(--text-muted);margin-top:0.25rem;">${r.text}</div>
+          <span style="float:right;">→</span>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('headerCitySelect').addEventListener('change', render);
+    initNotifications();
+    render();
+  </script>
+</body>
+</html>

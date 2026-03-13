@@ -1,0 +1,16 @@
+{
+  "name": "nagardrishti-ai",
+  "version": "1.0.0",
+  "description": "Smart City Analytics Platform for Indian cities",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js"
+  },
+  "keywords": ["smart-city", "analytics", "dashboard"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
